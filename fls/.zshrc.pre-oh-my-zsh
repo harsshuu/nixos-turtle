@@ -1,0 +1,104 @@
+# Zsh Configuration File
+
+# --- General Settings ---
+HISTFILE=~/.histfile
+HISTSIZE=50000
+SAVEHIST=50000
+setopt autocd beep extendedglob nomatch notify
+bindkey -v
+
+# --- Aliases ---
+# System Aliases
+alias update='sudo nixos-rebuild switch'
+alias ls='eza'
+alias ll='ls -la'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias edit='nvim'
+alias cls='clear'
+alias grep='grep --color=auto'
+
+# Application Aliases
+alias firefox='firefox'
+alias brave='brave'
+alias feh='feh --auto-zoom'
+alias flameshot='flameshot gui'
+alias zathura='zathura'
+alias mpv='mpv'
+alias redshift='redshift -O 4500K'
+
+# Development Aliases
+alias py='python3'
+alias pip='python3 -m pip'
+alias gcc='gcc'
+alias make='make'
+alias gitlog='git log --oneline --graph --decorate --all'
+
+# --- Git Aliases ---
+alias ginit='git init'
+alias gclone='git clone'
+alias gstatus='git status'
+alias gadd='git add .'
+alias gcommit='git commit -m'
+alias gpush='git push'
+alias gpull='git pull'
+alias gbranch='git branch'
+alias gmerge='git merge'
+alias grebase='git rebase'
+alias gdiff='git diff'
+alias glog='git log --oneline --graph --decorate --all'
+
+# --- Completion Configuration ---
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' file-sort size
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
+zstyle ':completion:*' list-suffixes true
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select=0
+zstyle ':completion:*' original false
+zstyle ':completion:*' preserve-prefix '//[^/]##/'
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle :compinstall filename '/home/turtle/.zshrc'
+
+autoload -Uz compinit
+compinit
+
+# --- Plugins ---
+source /run/current-system/sw/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /run/current-system/sw/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /run/current-system/sw/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+
+# --- Prompt Settings ---
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# --- Custom Functions ---
+git_cleanup() {
+  git branch --merged | grep -v '\*' | xargs -n 1 git branch -d
+  echo "Deleted merged branches."
+}
+
+disk_usage() {
+  du -h --max-depth=1 "$1" | sort -h
+}
+
+# --- Environment Variables ---
+export EDITOR=nvim
+export PATH="$PATH:/home/turtle/.local/bin"
+export NIXPKGS_ALLOW_UNFREE=1 
+
+# --- Theme ---
+source /run/current-system/sw/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+

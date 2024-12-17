@@ -1,0 +1,202 @@
+# World's Best configuration.nix for NixOS
+# A clean, structured, and highly configurable setup file designed to streamline your NixOS experience.
+
+{ config, lib, pkgs, ... }:
+
+{
+  # Import essential configurations and modules
+  imports = [
+    ./hardware-configuration.nix      # Hardware detection settings
+    <home-manager/nixos>
+  ];
+
+  system.stateVersion = "24.05"; # Matches your current NixOS release version
+
+  # --- Bootloader Configuration ---
+  boot.loader = {
+    systemd-boot.enable = true;        # Use systemd-boot for EFI systems
+    efi.canTouchEfiVariables = true;  # Allow changes to EFI variables
+  };
+
+  # --- Networking Configuration ---
+  networking = {
+    hostName = "nixos";                # Your system's hostname
+    wireless.enable = true;           # Enable Wi-Fi via wpa_supplicant
+    # Enable this for easier GUI-based network management:
+    # networkmanager.enable = true;
+  };
+
+  # --- Time & Localization ---
+  time.timeZone = "Asia/Kolkata";      # Set your timezone
+
+  # Uncomment below for localization needs
+  # i18n.defaultLocale = "en_US.UTF-8";
+  # console = {
+  #   font = "Lat2-Terminus16";        # Set terminal font
+  #   keyMap = "us";                   # Keyboard layout in TTY
+  #   useXkbConfig = true;             # Use xkb.options in TTY
+  # };
+
+  # --- Graphics & X11 Configuration ---
+  services.xserver = {
+    enable = true;                     # Enable the X11 display server
+    xkb = {
+      layout = "us";                  # Set default keyboard layout
+      options = "eurosign:e";  # Map Caps Lock to Escape
+    };
+    windowManager.dwm = {
+      enable = true;                   # Use DWM as the window manager
+      package = pkgs.dwm.overrideAttrs (oldAttrs: rec {
+        src = /home/turtle/.suckless/dwm;  # Custom DWM source
+      });
+    };
+  };
+
+  # --- Display Backlight Configuration ---
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chmod 0660 /sys/class/backlight/%k/brightness"
+    ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chown root:backlight /sys/class/backlight/%k/brightness"
+  '';
+
+  # --- Essential Utilities ---
+  environment.systemPackages = with pkgs; [
+    # Core tools
+    git
+    unzip
+    file
+    neovim
+    keychain
+    alacritty
+    networkmanagerapplet
+    eza
+    nerdfonts
+
+    # Productivity
+    firefox
+    brave
+    discord
+    gimp
+    redshift
+    thefuck
+
+    # Multimedia
+    mpv
+    feh
+    flameshot
+    lxappearance-gtk2
+    nordic
+    nitrogen
+
+    # Networking
+    wpa_supplicant
+    dhcpcd
+    wirelesstools
+    xorg.xdpyinfo
+
+    # Audio
+    alsa-utils
+
+    # Power Management
+    acpi
+    light
+
+    # Zsh plugins and themes
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    zsh-powerlevel10k
+
+    # Custom Tools
+    (dmenu.overrideAttrs (oldAttrs: rec {
+      src = /home/turtle/.suckless/dmenu;
+    }))
+  ];
+
+  # --- Sound Configuration ---
+  services.pipewire = {
+    enable = true;                    # Modern audio stack
+    alsa.enable = true;               # ALSA support
+    pulse.enable = true;              # PulseAudio compatibility
+    wireplumber.enable = true;        # Session management for PipeWire
+  };
+
+  # --- Bluetooth Configuration ---
+  hardware.bluetooth = {
+    enable = true;                    # Enable Bluetooth
+    powerOnBoot = true;               # Power Bluetooth on startup
+  };
+  services.blueman.enable = true;     # Bluetooth manager with GUI
+
+  # --- File Management (Thunar) ---
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
+
+  programs.xfconf.enable = true;      # Thunar configuration service
+  services.gvfs.enable = true;        # Enable GVFS for mounting drives
+  services.tumbler.enable = true;     # Thumbnail previews for files
+
+  # --- Touchpad Support ---
+  services.libinput.enable = true;    # Enable modern touchpad gestures
+
+  # --- Flakes Support & Experimental Features ---
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # --- Allow Unfree Packages ---
+  nixpkgs.config.allowUnfree = true; # Enables installation of non-free software
+
+  # --- User Configuration ---
+  users.users.turtle = {
+    isNormalUser = true;              # Standard user privileges
+    extraGroups = [ "wheel" ];        # Add user to the sudo group
+  };
+
+  # --- Home Manager User Configuration ---
+  home-manager.users.turtle = { pkgs, ... }: {
+  home.packages = [
+    # Add additional packages here if needed
+  ];
+
+  # Enable the XDG module
+  xdg.enable = true;
+
+  # Zsh configuration
+  programs.zsh = {
+    enable = true;                      # Enable Zsh
+    enableCompletion = true;            # Enable auto-completion
+    syntaxHighlighting.enable = true;   # Enable syntax highlighting
+
+    # Oh-My-Zsh configuration
+    oh-my-zsh = {
+      enable = true;                    # Enable Oh-My-Zsh
+      plugins = [ "git" "thefuck" "zsh-autosuggestions" "zsh-syntax-highlighting" ]; # Plugins
+      theme = "powerlevel10k/powerlevel10k"; # Set Powerlevel10k as the theme
+    };
+
+    # Shell aliases
+    shellAliases = {
+      ll = "ls -l";
+      update = "sudo nixos-rebuild switch";
+    };
+
+    # History settings
+    history = {
+      size = 10000;
+      path = "/home/turtle/.local/share/zsh/history";
+    };
+  };
+
+  # State version: this should stay the same as when you first set up Home Manager
+  home.stateVersion = "24.05";
+};
+
+  home-manager.useUserPackages = true;
+
+  # --- Enable zsh ---
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+}
+turtle@nixos:~/ >

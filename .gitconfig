@@ -1,0 +1,9 @@
+[user]
+	name = harsshuu
+	email = harssshuu@gmail.com
+[init]
+	defaultbranch = main
+[core]
+	editor = nvim
+[safe]
+	directory = /etc/nixos

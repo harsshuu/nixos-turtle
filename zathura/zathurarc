@@ -1,0 +1,26 @@
+# Enable Dark Mode (Recolor):
+set recolor true
+set recolor-darkcolor "#000000"  # Background
+set recolor-lightcolor "#FFFFFF"  # Text
+
+# Enable Continuous Scrolling:
+set adjust-open best-fit
+
+# Session Management (Last Page/Zoom Persistence):
+set database sqlite
+
+# Map Shortcuts for Efficiency: 
+# Zoom in and out:
+map <C-i> zoom in
+map <C-o> zoom out
+
+# Scroll continuously:
+map <C-j> scroll down
+map <C-k> scroll up
+
+# Adjust Additional Settings
+# Include optional tweaks:
+set zoom-min 50  # Minimum zoom
+set zoom-max 200  # Maximum zoom
+set page-padding 5  # Gap between pages
+

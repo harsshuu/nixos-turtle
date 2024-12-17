@@ -1,0 +1,24 @@
+# yt-dlp default options
+
+# Download best quality video and audio
+-f bestvideo+bestaudio/best
+
+# Merge video and audio to MKV format
+--merge-output-format mkv
+
+# Save files in the Downloads folder
+--output /home/turtle/dl/%(title)s.%(ext)s
+
+# Subtitle options
+--sub-lang en
+--write-sub
+--embed-subs
+
+# Metadata and thumbnail embedding
+--add-metadata
+--embed-thumbnail
+
+# Use aria2c for faster downloads
+--external-downloader aria2c
+--external-downloader-args "-x16 -k1M"
+

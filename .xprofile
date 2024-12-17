@@ -1,0 +1,10 @@
+#!/bin/sh
+#redshift -O 1400 &
+
+# Start the status updater
+#/home/turtle/scr/dwm_status_updater.sh &
+
+# Start the dwm with the status script
+/home/turtle/scr/dwm_status.sh &
+
+

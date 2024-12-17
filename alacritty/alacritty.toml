@@ -1,0 +1,59 @@
+# Alacritty Configuration File
+
+# Font Configuration
+[font]
+size = 16.0
+normal = { family = "MesloLGS Nerd Font Mono", style = "Regular" }
+bold = { family = "MesloLGS Nerd Font Mono", style = "Bold" }
+italic = { family = "MesloLGS Nerd Font Mono", style = "Italic" }
+bold_italic = { family = "MesloLGS Nerd Font Mono", style = "Bold Italic" }
+
+# Window Configuration
+[window]
+padding = { x = 25, y = 20 }
+dynamic_padding = false
+decorations = "Buttonless"
+opacity = 0.5
+startup_mode = "Windowed"
+title = "Alacritty Terminal"
+dynamic_title = true
+
+# Scrolling Configuration
+[scrolling]
+history = 10000
+multiplier = 3
+
+# Cursor Configuration
+[cursor]
+style = "Block"
+
+# Colors
+[colors.primary]
+background = "0x1e1e2e"
+foreground = "0xdcd7ba"
+
+[colors.cursor]
+text = "0x1e1e2e"
+cursor = "0xdcd7ba"
+
+# Key Bindings
+[[keyboard.bindings]]
+key = "V"
+mods = "Control"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "Q"
+mods = "Control"
+action = "Quit"
+
+[colors.normal]
+black = "#181818"
+red = "#ac4242"
+green = "#90a959"
+
